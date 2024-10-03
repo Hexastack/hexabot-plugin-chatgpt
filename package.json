@@ -1,8 +1,7 @@
 {
-  "name": "hexabot-chatgpt-rag",
+  "name": "hexabot-plugin-chatgpt",
   "version": "2.0.0",
   "description": "The OpenAI ChatGPT Plugin for Hexabot Chatbot / Agent Builder to enable the LLM RAG Capability",
-  "main": "chatgpt-rag.plugin.ts",
   "dependencies": {
     "openai": "^4.54.0"
   },
