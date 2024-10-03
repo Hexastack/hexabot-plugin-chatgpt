@@ -59,11 +59,6 @@ DOCUMENT 0
 Title: Example Title
 Data: Example Data...
 
-RECENT MESSAGES:
-
-1. User: Hi, how can I assist you today?
-2. User: Can you explain more about Hexastack’s services?
-
 INSTRUCTIONS:
 Based on the provided context and documents, answer the user's question clearly and concisely.
 
