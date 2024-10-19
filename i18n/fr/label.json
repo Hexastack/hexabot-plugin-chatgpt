@@ -1,0 +1,8 @@
+{
+  "token": "Jeton",
+  "model": "Modèle",
+  "context": "Contexte",
+  "instructions": "Instructions",
+  "num_ctx": "Nombre maximale de jetons",
+  "max_messages_ctx": "Nombre de messages"
+}

@@ -1,0 +1,8 @@
+{
+  "token": "Enter your API token to authenticate requests to the ChatGPT service.",
+  "model": "Select the model version to use for generating responses (e.g., gpt-3.5-turbo).",
+  "context": "Provide initial context or information that the model should consider when generating responses.",
+  "instructions": "Specify any special instructions or guidelines that the model should follow in its responses.",
+  "num_ctx": "Set the maximum number of tokens (words and punctuation) that the model can consider from the provided context.",
+  "max_messages_ctx": "Define the maximum number of previous interaction messages that the model should remember and consider when responding."
+}
