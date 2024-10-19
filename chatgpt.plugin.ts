@@ -44,14 +44,14 @@ export class ChatgptPlugin extends BaseBlockPlugin<
     };
   }
 
-  private async getMessagesContext(context: Context, max_messages_ctx = 5) {
-    const recentMessages = await this.messageService.findPage(
-      { $or: [{ sender: context.user.id }, { recipient: context.user.id }] },
-      { skip: 0, limit: max_messages_ctx, sort: ['createdAt', 'desc'] },
+  private async getMessagesContext(context: Context, maxMessagesCtx = 5) {
+    const recentMessages = await this.messageService.findLastMessages(
+      context.user,
+      maxMessagesCtx,
     );
 
     const messagesContext: { role: 'user' | 'assistant'; content: string }[] =
-      recentMessages.reverse().map((m) => {
+      recentMessages.map((m) => {
         const text =
           'text' in m.message && m.message.text
             ? m.message.text
@@ -88,7 +88,7 @@ export class ChatgptPlugin extends BaseBlockPlugin<
         `,
         },
         ...historicalMessages,
-        { role: 'user', content: 'QUESTION: \n' + context.text },
+        { role: 'user', content: context.text },
       ],
       temperature: 0.8,
       max_tokens: args.num_ctx || 256,
