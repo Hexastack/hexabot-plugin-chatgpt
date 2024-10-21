@@ -1,0 +1,8 @@
+{
+  "token": "Entrez votre jeton d'API pour authentifier les requêtes vers le service ChatGPT.",
+  "model": "Sélectionnez la version du modèle à utiliser pour générer les réponses (par exemple, gpt-3.5-turbo).",
+  "context": "Fournissez un contexte initial ou des informations que le modèle devrait prendre en compte lors de la génération des réponses.",
+  "instructions": "Spécifiez des instructions spéciales ou des directives que le modèle devrait suivre dans ses réponses.",
+  "num_ctx": "Définissez le nombre maximum de jetons (mots et ponctuations) que le modèle peut considérer à partir du contexte fourni.",
+  "max_messages_ctx": "Déterminez le nombre maximum de messages d'interactions précédentes que le modèle doit se souvenir et considérer lorsqu'il répond."
+}
