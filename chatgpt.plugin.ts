@@ -7,7 +7,6 @@
  */
 
 import { Injectable } from '@nestjs/common';
-import OpenAI from 'openai';
 
 import { Block } from '@/chat/schemas/block.schema';
 import { Context } from '@/chat/schemas/types/context';
@@ -21,100 +20,83 @@ import { LoggerService } from '@/logger/logger.service';
 import { BaseBlockPlugin } from '@/plugins/base-block-plugin';
 import { PluginService } from '@/plugins/plugins.service';
 
-import { CHATGPT_PLUGIN_SETTINGS } from './settings';
+import ChatGptLlmHelper from '@/extensions/helpers/hexabot-helper-chatgpt/index.helper';
+import { HelperService } from '@/helper/helper.service';
+import { HelperType } from '@/helper/types';
+import { PluginBlockTemplate } from '@/plugins/types';
+import CHATGPT_PLUGIN_SETTINGS from './settings';
 
 @Injectable()
 export class ChatgptPlugin extends BaseBlockPlugin<
   typeof CHATGPT_PLUGIN_SETTINGS
 > {
-  private openai: OpenAI;
+  template: PluginBlockTemplate = { name: 'ChatGPT RAG Plugin' };
 
   constructor(
     pluginService: PluginService,
+    private helperService: HelperService,
     private logger: LoggerService,
     private contentService: ContentService,
     private readonly messageService: MessageService,
   ) {
-    super('chatgpt', CHATGPT_PLUGIN_SETTINGS, pluginService);
-
-    this.template = { name: 'ChatGPT RAG Block' };
-
-    this.effects = {
-      onStoreContextData: () => {},
-    };
+    super('chatgpt-plugin', pluginService);
   }
 
-  private async getMessagesContext(context: Context, maxMessagesCtx = 5) {
-    const recentMessages = await this.messageService.findLastMessages(
-      context.user,
-      maxMessagesCtx,
-    );
-
-    const messagesContext: { role: 'user' | 'assistant'; content: string }[] =
-      recentMessages.map((m) => {
-        const text =
-          'text' in m.message && m.message.text
-            ? m.message.text
-            : JSON.stringify(m.message);
-        return {
-          role: 'sender' in m && m.sender ? 'user' : 'assistant',
-          content: text,
-        };
-      });
-
-    return messagesContext;
+  getPath(): string {
+    return __dirname;
   }
 
   async process(block: Block, context: Context, _convId: string) {
     const RAG = await this.contentService.textSearch(context.text);
     const args = this.getArguments(block);
-    const client = this.getInstance(args.token);
-    const historicalMessages = await this.getMessagesContext(
-      context,
+    const chatGptHelper = this.helperService.use(
+      HelperType.LLM,
+      ChatGptLlmHelper,
+    );
+
+    const history = await this.messageService.findLastMessages(
+      context.user,
       args.max_messages_ctx,
     );
-    const completion = await client.chat.completions.create({
-      model: args.model,
-      messages: [
-        {
-          role: 'system',
-          content: `CONTEXT: ${args.context}
+
+    const options = this.settings
+      .filter(
+        (setting) =>
+          'subgroup' in setting &&
+          setting.subgroup === 'options' &&
+          setting.value !== null,
+      )
+      .reduce((acc, { label }) => {
+        acc[label] = args[label];
+        return acc;
+      }, {});
+
+    const systemPrompt = `CONTEXT: ${args.context}
           DOCUMENTS: \n${RAG.reduce(
             (prev, curr, index) =>
               `${prev}\n\tDOCUMENT ${index} \n\t\tTitle:${curr.title}\n\t\tData:${curr.rag}`,
             '',
           )}\nINSTRUCTIONS: 
           ${args.instructions}
-        `,
-        },
-        ...historicalMessages,
-        { role: 'user', content: context.text },
-      ],
-      temperature: 0.8,
-      max_tokens: args.num_ctx || 256,
-    });
+        `;
+
+    const text = await chatGptHelper.generateChatCompletion(
+      context.text,
+      args.model,
+      systemPrompt,
+      history,
+      {
+        ...options,
+        user: context.user.id,
+      },
+    );
 
     const envelope: StdOutgoingTextEnvelope = {
       format: OutgoingMessageFormat.text,
       message: {
-        text: completion.choices[0].message.content,
+        text,
       },
     };
     return envelope;
-  }
-
-  private getInstance(token: string) {
-    if (this.openai) {
-      return this.openai;
-    }
-
-    try {
-      this.openai = new OpenAI({
-        apiKey: token,
-      });
-      return this.openai;
-    } catch (err) {
-      this.logger.warn('RAG: Unable to instanciate OpenAI', err);
-    }
   }
 }
