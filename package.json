@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "description": "The OpenAI ChatGPT Plugin for Hexabot Chatbot / Agent Builder to enable the LLM RAG Capability",
   "dependencies": {
-    "hexabot-helper-ollama": "^2.0.0"
+    "hexabot-helper-chatgpt": "^2.0.0"
   },
   "author": "Hexastack",
   "license": "AGPL-3.0-only"
