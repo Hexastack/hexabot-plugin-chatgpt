@@ -17,8 +17,9 @@ Before setting up the ChatGPT Plugin, you will need to generate an API token fro
 First, navigate to your Hexabot project directory and make sure the dependencies are installed:
 
 ```sh
-cd ~/projects/Hexabot
-npm install hexabot-plugin-chatgpt --prefix ./api
+cd ~/projects/my-chatbot
+npm install hexabot-plugin-chatgpt
+hexabot dev
 ```
 
 ## Configuration

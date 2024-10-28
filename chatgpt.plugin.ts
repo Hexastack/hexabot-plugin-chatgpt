@@ -20,7 +20,7 @@ import { LoggerService } from '@/logger/logger.service';
 import { BaseBlockPlugin } from '@/plugins/base-block-plugin';
 import { PluginService } from '@/plugins/plugins.service';
 
-import ChatGptLlmHelper from '@/extensions/helpers/hexabot-helper-chatgpt/index.helper';
+import ChatGptLlmHelper from '@/contrib/extensions/helpers/hexabot-helper-chatgpt/index.helper';
 import { HelperService } from '@/helper/helper.service';
 import { HelperType } from '@/helper/types';
 import { PluginBlockTemplate } from '@/plugins/types';
