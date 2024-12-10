@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Exit immediately if a command exits with a non-zero status
 set -e
 
 # Check if a version type (minor, patch) is provided
@@ -15,18 +14,19 @@ if [[ $(git status --porcelain) ]]; then
   exit 1
 fi
 
-# Bump the version using npm
 VERSION_TYPE=$1
 echo "Bumping version ($VERSION_TYPE)..."
 NEW_VERSION=$(npm version $VERSION_TYPE -m "chore(release): bump version to %s")
 
-# Stage changes
-echo "Staging changes..."
-git add package.json package-lock.json
+# Stage package.json
+git add package.json
 
-# Commit changes (npm version already commits, so this is optional if files are staged correctly)
-echo "Committing changes..."
-git commit -m "chore(release): bump version to $NEW_VERSION"
+# Conditionally stage package-lock.json
+if [ -f package-lock.json ]; then
+  git add package-lock.json
+else
+  echo "No package-lock.json found. Skipping..."
+fi
 
 # Push changes and tags
 echo "Pushing changes and tags..."
