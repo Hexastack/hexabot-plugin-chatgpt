@@ -1,4 +1,4 @@
-name: Publish Hexabot ChatGPT Plugin NPM Package
+name: Publish NPM Package
 
 on:
   push:
@@ -18,12 +18,6 @@ jobs:
         with:
           node-version: '18'
           cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci --ignore-scripts
-
-      - name: Build the package
-        run: npm run build
 
       - name: Determine release type
         id: determine-release
