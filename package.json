@@ -7,7 +7,7 @@
     "release:minor": "npm version minor && git push origin main --tags"
   },
   "dependencies": {
-    "hexabot-helper-chatgpt": "^2.0.0"
+    "hexabot-helper-chatgpt": "^2.1.0"
   },
   "author": "Hexastack",
   "license": "AGPL-3.0-only"
