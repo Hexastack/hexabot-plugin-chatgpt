@@ -16,14 +16,14 @@ import {
 } from '@/chat/schemas/types/message';
 import { MessageService } from '@/chat/services/message.service';
 import { ContentService } from '@/cms/services/content.service';
-import { LoggerService } from '@/logger/logger.service';
-import { BaseBlockPlugin } from '@/plugins/base-block-plugin';
-import { PluginService } from '@/plugins/plugins.service';
-
 import ChatGptLlmHelper from '@/contrib/extensions/helpers/hexabot-helper-chatgpt/index.helper';
 import { HelperService } from '@/helper/helper.service';
 import { HelperType } from '@/helper/types';
+import { LoggerService } from '@/logger/logger.service';
+import { BaseBlockPlugin } from '@/plugins/base-block-plugin';
+import { PluginService } from '@/plugins/plugins.service';
 import { PluginBlockTemplate } from '@/plugins/types';
+
 import CHATGPT_PLUGIN_SETTINGS from './settings';
 
 @Injectable()
@@ -47,6 +47,10 @@ export class ChatgptPlugin extends BaseBlockPlugin<
   }
 
   async process(block: Block, context: Context, _convId: string) {
+    if (!context.text) {
+      throw new Error('Context text is required');
+    }
+
     const RAG = await this.contentService.textSearch(context.text);
     const args = this.getArguments(block);
     const chatGptHelper = this.helperService.use(
