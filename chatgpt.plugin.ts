@@ -47,11 +47,9 @@ export class ChatgptPlugin extends BaseBlockPlugin<
   }
 
   async process(block: Block, context: Context, _convId: string) {
-    if (!context.text) {
-      throw new Error('Context text is required');
-    }
-
-    const RAG = await this.contentService.textSearch(context.text);
+    const RAG = context.text
+      ? await this.contentService.textSearch(context.text)
+      : [];
     const args = this.getArguments(block);
     const chatGptHelper = this.helperService.use(
       HelperType.LLM,
