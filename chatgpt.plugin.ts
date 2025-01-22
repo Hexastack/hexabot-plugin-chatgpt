@@ -82,16 +82,17 @@ export class ChatgptPlugin extends BaseBlockPlugin<
           ${args.instructions}
         `;
 
-    const text = await chatGptHelper.generateChatCompletion(
-      context.text,
-      args.model,
-      systemPrompt,
-      history,
-      {
-        ...options,
-        user: context.user.id,
-      },
-    );
+    const text = context?.text 
+      ? await chatGptHelper.generateChatCompletion(
+          context.text, 
+          args.model, 
+          systemPrompt, 
+          history, 
+          { ...options, 
+            user: context.user.id, 
+          },
+        ) 
+      : "";
 
     const envelope: StdOutgoingTextEnvelope = {
       format: OutgoingMessageFormat.text,
