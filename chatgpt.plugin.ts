@@ -1,5 +1,5 @@
 /*
- * Copyright © 2024 Hexastack. All rights reserved.
+ * Copyright © 2025 Hexastack. All rights reserved.
  *
  * Licensed under the GNU Affero General Public License v3.0 (AGPLv3) with the following additional terms:
  * 1. The name "Hexabot" is a trademark of Hexastack. You may not use this name in derivative works without express written permission.
@@ -46,50 +46,46 @@ export class ChatgptPlugin extends BaseBlockPlugin<
     return __dirname;
   }
 
-  async process(block: Block, context: Context, _convId: string) {
-    const RAG = context.text
-      ? await this.contentService.textSearch(context.text)
+  async process(block: Block, ctx: Context, _convId: string) {
+    const RAG = ctx.text
+      ? await this.contentService.textSearch(ctx.text)
       : [];
-    const args = this.getArguments(block);
+    const {
+      model,
+      context,
+      max_messages_ctx,
+      instructions,
+      ...options
+    } = this.getArguments(block);
+
     const chatGptHelper = this.helperService.use(
       HelperType.LLM,
       ChatGptLlmHelper,
     );
 
     const history = await this.messageService.findLastMessages(
-      context.user,
-      args.max_messages_ctx,
+      ctx.user,
+      max_messages_ctx,
     );
 
-    const options = this.settings
-      .filter(
-        (setting) =>
-          'subgroup' in setting &&
-          setting.subgroup === 'options' &&
-          setting.value !== null,
-      )
-      .reduce((acc, { label }) => {
-        acc[label] = args[label];
-        return acc;
-      }, {});
-
-    const systemPrompt = `CONTEXT: ${args.context}
+    const systemPrompt = `CONTEXT: ${context}
           DOCUMENTS: \n${RAG.reduce(
             (prev, curr, index) =>
               `${prev}\n\tDOCUMENT ${index} \n\t\tTitle:${curr.title}\n\t\tData:${curr.rag}`,
             '',
           )}\nINSTRUCTIONS: 
-          ${args.instructions}
+          ${instructions}
         `;
 
-    const text = context?.text 
+    const text = ctx?.text 
       ? await chatGptHelper.generateChatCompletion(
-          context.text, 
-          args.model, 
+          ctx.text, 
+          model, 
           systemPrompt, 
           history, 
           { ...options, 
-            user: context.user.id, 
+            logit_bias: JSON.parse(options.logit_bias) as Record<string, number> || {}, 
+            user: ctx.user.id, 
           },
         ) 
       : "";
