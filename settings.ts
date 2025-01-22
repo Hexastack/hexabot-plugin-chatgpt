@@ -46,12 +46,12 @@ export default [
     type: SettingType.number,
     value: 0, // Default value, between -2.0 and 2.0
   },
-  {
-    label: 'function_call',
-    group: 'options',
-    type: SettingType.text,
-    value: 'none', // Default value ('none' or 'auto')
-  },
+  // {
+  //   label: 'function_call',
+  //   group: 'options',
+  //   type: SettingType.text,
+  //   value: 'none', // Default value ('none' or 'auto')
+  // },
   {
     label: 'logit_bias',
     group: 'options',
@@ -70,24 +70,24 @@ export default [
     type: SettingType.number,
     value: 1, // Default value
   },
-  {
-    label: 'parallel_tool_calls',
-    group: 'options',
-    type: SettingType.checkbox,
-    value: false, // Default value
-  },
+  // {
+  //   label: 'parallel_tool_calls',
+  //   group: 'options',
+  //   type: SettingType.checkbox,
+  //   value: false, // Default value
+  // },
   {
     label: 'presence_penalty',
     group: 'options',
     type: SettingType.number,
     value: 0, // Default value, between -2.0 and 2.0
   },
-  {
-    label: 'response_format',
-    group: 'options',
-    type: SettingType.text,
-    value: 'text', // Default value ('text' or 'json')
-  },
+  // {
+  //   label: 'response_format',
+  //   group: 'options',
+  //   type: SettingType.text,
+  //   value: 'text', // Default value ('text' or 'json')
+  // },
   {
     label: 'seed',
     group: 'options',
@@ -113,12 +113,12 @@ export default [
   //   type: SettingType.checkbox,
   //   value: false, // Default value
   // },
-  {
-    label: 'tool_choice',
-    group: 'options',
-    type: SettingType.text,
-    value: 'auto', // Default value ('none', 'auto', 'required')
-  },
+  // {
+  //   label: 'tool_choice',
+  //   group: 'options',
+  //   type: SettingType.text,
+  //   value: 'auto', // Default value ('none', 'auto', 'required')
+  // },
   {
     label: 'top_logprobs',
     group: 'options',
