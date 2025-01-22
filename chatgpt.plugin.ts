@@ -89,8 +89,8 @@ export class ChatgptPlugin extends BaseBlockPlugin<
           systemPrompt, 
           history, 
           { ...options, 
-            user: context.user.id 
-          }
+            user: context.user.id, 
+          },
         ) 
       : "";
 
