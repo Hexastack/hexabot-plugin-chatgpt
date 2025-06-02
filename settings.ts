@@ -92,13 +92,13 @@ export default [
     label: 'seed',
     group: 'options',
     type: SettingType.number,
-    value: null, // Default value (null for no seed)
+    value: -1, // Default value (-1 for no seed)
   },
   {
     label: 'stop',
     group: 'options',
     type: SettingType.text,
-    value: null, // Default value (null or stop sequence)
+    value: '', // Default value ('' or stop sequence)
   },
   {
     label: 'store',
@@ -123,7 +123,7 @@ export default [
     label: 'top_logprobs',
     group: 'options',
     type: SettingType.number,
-    value: null, // Default value (null or number between 0 and 20)
+    value: -1, // Default value (-1 or number between 0 and 20)
   },
   {
     label: 'top_p',
