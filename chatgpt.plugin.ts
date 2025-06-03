@@ -47,16 +47,9 @@ export class ChatgptPlugin extends BaseBlockPlugin<
   }
 
   async process(block: Block, ctx: Context, _convId: string) {
-    const RAG = ctx.text
-      ? await this.contentService.textSearch(ctx.text)
-      : [];
-    const {
-      model,
-      context,
-      max_messages_ctx,
-      instructions,
-      ...options
-    } = this.getArguments(block);
+    const RAG = ctx.text ? await this.contentService.textSearch(ctx.text) : [];
+    const { model, context, max_messages_ctx, instructions, ...options } =
+      this.getArguments(block);
 
     const chatGptHelper = this.helperService.use(
       HelperType.LLM,
@@ -77,18 +70,20 @@ export class ChatgptPlugin extends BaseBlockPlugin<
           ${instructions}
         `;
 
-    const text = ctx?.text 
+    const text = ctx?.text
       ? await chatGptHelper.generateChatCompletion(
-          ctx.text, 
-          model, 
-          systemPrompt, 
-          history, 
-          { ...options, 
-            logit_bias: JSON.parse(options.logit_bias) as Record<string, number> || {}, 
-            user: ctx.user.id, 
+          ctx.text,
+          model,
+          systemPrompt,
+          history,
+          {
+            ...options,
+            logit_bias:
+              (JSON.parse(options.logit_bias) as Record<string, number>) || {},
+            user: ctx.user.id,
           },
-        ) 
-      : "";
+        )
+      : '';
 
     const envelope: StdOutgoingTextEnvelope = {
       format: OutgoingMessageFormat.text,
