@@ -7,7 +7,7 @@
     "release:minor": "npm version minor && git push origin main --tags"
   },
   "peerDependencies": {
-    "hexabot-helper-chatgpt": "^2.2.2"
+    "hexabot-helper-chatgpt": "^2.2.4"
   },
   "author": "Hexastack",
   "license": "AGPL-3.0-only"
