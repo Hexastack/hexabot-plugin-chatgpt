@@ -16,7 +16,7 @@ import {
 } from '@/chat/schemas/types/message';
 import { MessageService } from '@/chat/services/message.service';
 import { ContentService } from '@/cms/services/content.service';
-import ChatGptLlmHelper from '@/contrib/extensions/helpers/hexabot-helper-chatgpt/index.helper';
+import ChatGptLlmHelper from '@/extensions/helpers/hexabot-helper-chatgpt/index.helper';
 import { HelperService } from '@/helper/helper.service';
 import { HelperType } from '@/helper/types';
 import { LoggerService } from '@/logger/logger.service';
@@ -78,9 +78,23 @@ export class ChatgptPlugin extends BaseBlockPlugin<
           history,
           {
             ...options,
+            user: ctx.user.id,
+            seed:
+              typeof options.seed === 'number' && options.seed >= 0
+                ? options.seed
+                : null,
+            stop: !!options.stop ? options.stop : null,
+            top_logprobs:
+              options.logprobs &&
+              typeof options.top_logprobs === 'number' &&
+              options.top_logprobs >= 0
+                ? options.top_logprobs
+                : undefined,
             logit_bias:
               (JSON.parse(options.logit_bias) as Record<string, number>) || {},
-            user: ctx.user.id,
+            max_completion_tokens: parseInt(
+              (options.max_completion_tokens || 0).toString(),
+            ),
           },
         )
       : '';
