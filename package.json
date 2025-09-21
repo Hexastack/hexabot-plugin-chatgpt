@@ -1,6 +1,6 @@
 {
   "name": "hexabot-plugin-chatgpt",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "The OpenAI ChatGPT Plugin for Hexabot Chatbot / Agent Builder to enable the LLM RAG Capability",
   "scripts": {
     "release:patch": "npm version patch && git push origin main --tags",
